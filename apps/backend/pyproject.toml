@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-dictionary-backend"
+version = "0.1.0"
+description = "FastAPI service powering the AI Dictionary Agent"
+authors = [{ name = "AI Dictionary Team" }]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "requests",
+    "redis",
+    "pydantic-settings",
+    "sentence-transformers",
+    "torch",
+    "spacy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "httpx",
+    "black",
+    "isort",
+]
+
+[project.scripts]
+ai-dictionary-backend = "app.main:app"

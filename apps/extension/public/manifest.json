@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "AI Dictionary Agent",
+  "version": "1.0.0",
+  "description": "Context-aware dictionary assistant powered by FastAPI backend",
+  "permissions": ["contextMenus", "activeTab", "scripting", "storage"],
+  "host_permissions": ["http://localhost:8000/*", "<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["floating-dialog.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "AI Dictionary",
+    "default_popup": "popup.html"
+  }
+}
