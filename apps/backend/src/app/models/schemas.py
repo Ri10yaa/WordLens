@@ -50,3 +50,12 @@ class ContextualMeaningResponse(BaseModel):
     definition: Optional[str]
     confidence: float
     sense_id: Optional[str]
+
+
+class WordLookupRequest(BaseModel):
+    word: str
+
+
+class LiteralSensesResponse(BaseModel):
+    word: str
+    senses: List[Sense]

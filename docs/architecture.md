@@ -1,7 +1,7 @@
 # Architecture
 
 ```
-Chrome Extension  ──►  FastAPI Backend  ──►  Free Dictionary API
+Chrome Extension  ──►  FastAPI Backend  ──►  Merriam-Webster API
         │                    │                     │
         │                    ├──► Redis Cache ◄────┘
         │
@@ -9,6 +9,6 @@ Chrome Extension  ──►  FastAPI Backend  ──►  Free Dictionary API
 ```
 
 - The Chrome extension injects a floating dialog on every page and sends `/define` and `/tools/define_contextual` requests to the backend.
-- The backend fetches baseline data from `dictionaryapi.dev`, normalizes entries, embeds definitions, and ranks senses using SentenceTransformer + CrossEncoder with heuristic boosts.
+- The backend fetches baseline data from the Merriam-Webster Collegiate Dictionary API, normalizes entries, embeds definitions, and ranks senses using SentenceTransformer + CrossEncoder with heuristic boosts.
 - Definitions are cached in Redis for a day; subsequent contextual lookups reuse the cached structure.
-- The OpenAI agent exposes the same contextual tool via function calling so textual prompts get routed to the backend.
+- The OpenAI agent first calls `/tools/list_senses` to fetch all literal meanings, then reasons over that list to deliver the contextual sense back to the user via function calling.

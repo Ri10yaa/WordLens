@@ -6,16 +6,37 @@ from app.services import sense_selection
 def test_normalize_response_groups_senses_by_part_of_speech():
     raw = [
         {
-            "meanings": [
+            "fl": "noun",
+            "hwi": {"prs": [{"mw": "ˈbæŋk"}]},
+            "def": [
                 {
-                    "partOfSpeech": "noun",
-                    "definitions": [
-                        {"definition": "A financial institution", "example": "Bank loan"},
-                        {"definition": "The edge of a river"},
-                    ],
+                    "sseq": [
+                        [
+                            [
+                                "sense",
+                                {
+                                    "sn": "1",
+                                    "dt": [
+                                        ["text", "{bc}a financial institution"],
+                                        ["vis", [{"t": "She works at the bank"}]],
+                                    ],
+                                    "syn_list": [[{"wd": "lender"}]],
+                                },
+                            ]
+                        ],
+                        [
+                            [
+                                "sense",
+                                {
+                                    "sn": "2",
+                                    "dt": [["text", "{bc}the land alongside a river"]],
+                                    "ant_list": [[{"wd": "midstream"}]],
+                                },
+                            ]
+                        ],
+                    ]
                 }
             ],
-            "phonetics": [{"text": "bæŋk"}],
         }
     ]
 
@@ -25,6 +46,7 @@ def test_normalize_response_groups_senses_by_part_of_speech():
     assert len(normalized.entries) == 1
     assert normalized.entries[0].partOfSpeech == "noun"
     assert len(normalized.entries[0].senses) == 2
+    assert normalized.entries[0].senses[0].examples == ["She works at the bank"]
 
 
 def test_select_best_sense_returns_candidate_when_available(monkeypatch):

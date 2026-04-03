@@ -8,6 +8,8 @@ from app.models import (
     ContextualMeaningRequest,
     ContextualMeaningResponse,
     EntriesByLanguageAndWord,
+    LiteralSensesResponse,
+    WordLookupRequest,
 )
 from app.services.normalizer import normalize_response
 from app.services.sense_selection import select_best_sense
@@ -15,36 +17,49 @@ from app.services.sense_selection import select_best_sense
 router = APIRouter(tags=["Dictionary"])
 
 
-@router.get("/define/{word}")
-def define_word(word: str) -> EntriesByLanguageAndWord:
-    raw_data = fetch_word_data(word)
+def _load_normalized_word(word: str) -> EntriesByLanguageAndWord:
+    cached = get_cached_word(word)
+    if cached:
+        return EntriesByLanguageAndWord.model_validate(cached)
 
-    if not raw_data:
+    raw = fetch_word_data(word)
+    if not raw:
         raise HTTPException(status_code=404, detail=f"Word '{word}' not found")
 
-    normalized = normalize_response(word=word, raw_data=raw_data)
+    normalized = normalize_response(word=word, raw_data=raw)
     cache_word(word=word, normalized_data=normalized.model_dump())
     return normalized
 
 
-@router.post("/tools/define_contextual", response_model=ContextualMeaningResponse)
-def define_contextual(payload: ContextualMeaningRequest):
-    cached = get_cached_word(payload.word)
-    if cached:
-        normalized = EntriesByLanguageAndWord.model_validate(cached)
-    else:
-        raw = fetch_word_data(payload.word)
-        if not raw:
-            raise HTTPException(status_code=404, detail=f"Word '{payload.word}' not found")
-
-        normalized = normalize_response(payload.word, raw)
-        cache_word(payload.word, normalized.model_dump())
-
-    all_senses = []
+def _collect_senses(normalized: EntriesByLanguageAndWord):
+    senses = []
     for entry in normalized.entries:
         for sense in entry.senses:
             sense.partOfSpeech = entry.partOfSpeech
-            all_senses.append(sense)
+            senses.append(sense)
+    return senses
+
+
+@router.get("/define/{word}")
+def define_word(word: str) -> EntriesByLanguageAndWord:
+    return _load_normalized_word(word)
+
+
+@router.post("/tools/list_senses", response_model=LiteralSensesResponse)
+def list_senses(payload: WordLookupRequest):
+    normalized = _load_normalized_word(payload.word)
+    senses = _collect_senses(normalized)
+
+    if not senses:
+        raise HTTPException(status_code=404, detail=f"Word '{payload.word}' has no senses")
+
+    return {"word": payload.word, "senses": senses}
+
+
+@router.post("/tools/define_contextual", response_model=ContextualMeaningResponse)
+def define_contextual(payload: ContextualMeaningRequest):
+    normalized = _load_normalized_word(payload.word)
+    all_senses = _collect_senses(normalized)
 
     if not all_senses:
         raise HTTPException(status_code=400, detail="No senses found for word")

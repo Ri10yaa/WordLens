@@ -18,7 +18,8 @@ class Settings(BaseSettings):
     redis_port: int = 6379
     cache_ttl: int = 86_400
 
-    free_dictionary_url: str = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+    dictionary_api_url: str = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/"
+    dictionary_api_key: str = "demo-key"
 
 
 @lru_cache

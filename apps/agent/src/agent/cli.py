@@ -7,10 +7,11 @@ from agent.runtime import run_agent
 
 def main():
     parser = argparse.ArgumentParser(description="AI Dictionary Agent CLI")
-    parser.add_argument("prompt", help="User prompt to send to the agent")
+    parser.add_argument("word", help="Word to analyze")
+    parser.add_argument("sentence", help="Sentence providing context")
     args = parser.parse_args()
 
-    result = run_agent(args.prompt)
+    result = run_agent(args.word, args.sentence)
     print(result)
 
 

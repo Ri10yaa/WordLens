@@ -1,14 +1,14 @@
 # Backend Service
 
-FastAPI application that powers the AI Dictionary Agent. It exposes `/health`, `/define/{word}`, and `/tools/define_contextual` endpoints, wraps the Free Dictionary API, ranks senses with SentenceTransformer + CrossEncoder models, and caches responses in Redis.
+FastAPI application that powers the AI Dictionary Agent. It exposes `/health`, `/define/{word}`, and `/tools/define_contextual` endpoints, wraps the Merriam-Webster Collegiate Dictionary API, ranks senses with SentenceTransformer + CrossEncoder models, and caches responses in Redis.
+The upstream data source is the [Merriam-Webster Collegiate Dictionary API](https://dictionaryapi.com/) configured via `DICTIONARY_API_URL` and `DICTIONARY_API_KEY`.
 
 ## Getting Started
 
-1. **Install dependencies**
+1. **Install dependencies (from repo root)**
 
    ```bash
-   cd apps/backend
-   python -m venv .venv && source .venv/bin/activate
+   python3 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    python -m spacy download en_core_web_sm
    ```
@@ -17,7 +17,7 @@ FastAPI application that powers the AI Dictionary Agent. It exposes `/health`, `
 
    ```bash
    cp .env.example .env
-   # adjust Redis host/port if needed
+   # add your Merriam-Webster API key
    ```
 
 3. **Run the API**

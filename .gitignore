@@ -1,3 +1,10 @@
 .env
+.venv/
+*.egg-info/
 apps/backend/.env
+apps/backend/.dict_env/
 apps/agent/.env
+apps/agent/.agent_env/
+apps/agent/.venv/
+apps/extension/node_modules/
+apps/extension/dist/

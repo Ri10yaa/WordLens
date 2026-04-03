@@ -5,9 +5,11 @@ from .schemas import (
     ContextualMeaningResponse,
     EntriesByLanguageAndWord,
     Entry,
+    LiteralSensesResponse,
     Pronunciation,
     Sense,
     Source,
+    WordLookupRequest,
 )
 
 __all__ = [
@@ -15,7 +17,9 @@ __all__ = [
     "ContextualMeaningResponse",
     "EntriesByLanguageAndWord",
     "Entry",
+    "LiteralSensesResponse",
     "Pronunciation",
     "Sense",
     "Source",
+    "WordLookupRequest",
 ]

@@ -1,18 +1,18 @@
 """Tool definitions that call the backend API."""
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import requests
 
 from agent.config import settings
 
 
-def define_contextual(word: str, sentence: Optional[str] = None) -> Dict[str, Any]:
-    payload = {"word": word, "sentence": sentence or ""}
+def fetch_literal_senses(word: str) -> Dict[str, Any]:
+    payload = {"word": word}
 
     try:
         response = requests.post(
-            f"{settings.backend_url}/tools/define_contextual",
+            f"{settings.backend_url}/tools/list_senses",
             json=payload,
             timeout=10,
         )

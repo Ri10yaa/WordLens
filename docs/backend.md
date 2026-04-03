@@ -5,5 +5,6 @@
 - Endpoints:
   - `GET /health` – status probe
   - `GET /define/{word}` – raw normalized dictionary entries
+  - `POST /tools/list_senses` – literal senses (Sense objects) for the requested word
   - `POST /tools/define_contextual` – best matching definition with probability
 - Cache TTL defaults to 24h; adjust via `CACHE_TTL` env var if necessary.
